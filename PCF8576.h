@@ -65,11 +65,18 @@ class PCF8576
         void begin();
         void addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t blink, uint8_t bankSel);
         void init();
-        void lcd_clear();
-        void lcd_fire();
+        void clear();
+        void fire();
+        void add();
+        void addInd(float val);
+        void addToBuffer(uint8_t *val);
+        void show();
     private:
         uint8_t settings[16][5];
         uint8_t PCFcount = 0;
+        uint8_t buffer[160][3];
+        //uint8_t oldBuffer[160][3];
+        uint8_t bufferCount = 0;
 
 };
 
