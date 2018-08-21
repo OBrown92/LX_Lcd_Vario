@@ -12,7 +12,7 @@ PCF8576::PCF8576()
 
 //Begin method
 void PCF8576::begin(){
-    
+    Serial.println(SCR[0][0]);
 }
 
 void PCF8576::addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t blink, uint8_t bankSel){
@@ -59,34 +59,64 @@ void PCF8576::fire(){
 	Wire.endTransmission();
 }
 
-void PCF8576::show(){
-    //show and clear the buffer
-    clear();
-    for (uint8_t i = 0; i < bufferCount; i++){
-        uint8_t aktBuffer[3];
-        aktBuffer[0] = buffer[i][0];
-        aktBuffer[1] = buffer[i][1];
-        aktBuffer[2] = buffer[i][2];      
-        for (uint8_t j = 0; j < bufferCount; j++){
-            if(aktBuffer[0] == buffer[j][0] && aktBuffer[1] == buffer[j][1]){
-                aktBuffer[2] = aktBuffer[2] | buffer[j][2];
+void PCF8576::show2(){
+    //because clearing and setting new display data let the display
+    //flicker, this is a new try to solve this Problem by not clearing
+    //the display first
+    uint8_t newBuffer[19][3];
+    uint8_t newBufferCount = 0;
+
+    for (uint8_t i = 0; i < buffer; i++){
+        for (uint8_t j = 0; j < oldBuffer; j++){
+            if (buffer[i][1] == oldBuffer[j][1]){
+                
             }
         }
+    }
+
+
+
+
+    //copy Array for next interval
+    for (uint8_t i = 0; i < bufferCount; i++){
+        for (uint8_t j = 0; j < 3; j++){
+            oldBuffer[i][j] = buffer[i][j];
+        }
+    }
+    oldBufferCount = bufferCount;
+}
+
+void PCF8576::show(){
+    //clear the display, let it flicker
+    clear();
+    //Write the data to the display
+    for (uint8_t i = 0; i < bufferCount; i++){
         Wire.beginTransmission(settings[0][0]);
-        Wire.write(CONTINUE | settings[aktBuffer[0]][2]);   
-        Wire.write(aktBuffer[1]); //pointer
-        Wire.write(aktBuffer[2]); //data
+        Wire.write(CONTINUE | settings[buffer[i][0]][2]); //devsel
+        Wire.write(buffer[i][1]); //pointer
+        Wire.write(buffer[i][2]); //data
         Wire.endTransmission();
     }
-    //memcpy(buffer, oldBuffer, 256);
+    //reset the buffer counter, no need to clear the array
     bufferCount = 0;
 }
 
 void PCF8576::addToBuffer(uint8_t *val){
-    buffer[bufferCount][0] = val[0];
-    buffer[bufferCount][1] = val[1];
-    buffer[bufferCount][2] = val[2];
-    bufferCount++; 
+    //check if section already set and do bitwise or
+    bool found = false;
+    for (uint8_t i = 0; i < bufferCount; i++){
+        if (buffer[i][0] == val[0] && buffer[i][1] == val[1]){
+            buffer[i][2] = buffer[i][2] | val[2];
+            found = true;
+            break;
+        }
+    }
+    if(!found){
+        for (uint8_t i = 0; i < 3; i++){
+            buffer[bufferCount][i] = val[i];
+        }
+        bufferCount++;
+    } 
 }
 
 void PCF8576::addInd(float val){

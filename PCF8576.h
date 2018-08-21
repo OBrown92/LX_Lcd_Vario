@@ -71,12 +71,14 @@ class PCF8576
         void addInd(float val);
         void addToBuffer(uint8_t *val);
         void show();
+        void show2();
     private:
         uint8_t settings[16][5];
         uint8_t PCFcount = 0;
-        uint8_t buffer[160][3];
-        //uint8_t oldBuffer[160][3];
+        uint8_t buffer[19][3];  //max 19 needed, course its only 19 different Pointer
+        uint8_t oldBuffer[19][3];
         uint8_t bufferCount = 0;
+        uint8_t oldBufferCount = 0;
 
 };
 
