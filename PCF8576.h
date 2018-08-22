@@ -72,6 +72,8 @@ class PCF8576
         void addToBuffer(uint8_t *val);
         void show();
         void show2();
+        void addScr(uint8_t val);
+        void addSym(uint8_t val);
     private:
         uint8_t settings[16][5];
         uint8_t PCFcount = 0;

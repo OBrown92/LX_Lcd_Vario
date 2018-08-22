@@ -8,6 +8,9 @@
 PCF8576::PCF8576()
 {
     Wire.begin();
+    //oldBuffer[0][0] = 0;
+    //oldBuffer[0][1] = 0;
+    //oldBuffer[0][2] = 0;
 }
 
 //Begin method
@@ -63,18 +66,43 @@ void PCF8576::show2(){
     //because clearing and setting new display data let the display
     //flicker, this is a new try to solve this Problem by not clearing
     //the display first
-    uint8_t newBuffer[19][3];
-    uint8_t newBufferCount = 0;
 
-    for (uint8_t i = 0; i < buffer; i++){
-        for (uint8_t j = 0; j < oldBuffer; j++){
-            if (buffer[i][1] == oldBuffer[j][1]){
-                
+    //first set all data from the old buffer to zero
+    for (uint8_t i = 0; i < oldBufferCount; i++){
+        oldBuffer[i][2] = 0;
+    }
+    //compare if pointer already exist and set data from new buffer
+    //if not add line to oldBuffer
+    bool found = false;
+    for (uint8_t i = 0; i < bufferCount; i++){
+        for (uint8_t j = 0; j < oldBufferCount; j++){
+            if (buffer[i][1] == oldBuffer[j][1] && buffer[i][0] == oldBuffer[j][0]){
+                oldBuffer[j][2] = buffer[i][2];
+                found = true;
+                //break;
             }
         }
+        if(!found){
+            
+            oldBuffer[oldBufferCount][0] = buffer[i][0];
+            oldBuffer[oldBufferCount][1] = buffer[i][1];
+            oldBuffer[oldBufferCount][2] = buffer[i][2];
+            found = false;
+            oldBufferCount++;
+        }
     }
+    Serial.println(oldBuffer[0][0]);
+    Serial.println(oldBuffer[0][1]);
+    Serial.println(oldBuffer[0][2]);
 
-
+    //actually write the data
+    for (uint8_t i = 0; i < oldBufferCount; i++){
+        Wire.beginTransmission(settings[0][0]);
+        Wire.write(CONTINUE | settings[oldBuffer[i][0]][2]); //devsel
+        Wire.write(oldBuffer[i][1]); //pointer
+        Wire.write(oldBuffer[i][2]); //data
+        Wire.endTransmission();
+    }
 
 
     //copy Array for next interval
@@ -84,6 +112,7 @@ void PCF8576::show2(){
         }
     }
     oldBufferCount = bufferCount;
+    bufferCount = 0;
 }
 
 void PCF8576::show(){
@@ -128,4 +157,12 @@ void PCF8576::addInd(float val){
         val = (uint8_t)round((val - (-5)) * (0 - 50) / (5 - (-5)) + (50));
         addToBuffer((uint8_t *)IND[(uint8_t)val]);
     }
+}
+
+void PCF8576::addScr(uint8_t val){
+    addToBuffer((uint8_t *)SCR[(uint8_t)val]);
+}
+
+void PCF8576::addSym(uint8_t val){
+    addToBuffer((uint8_t *)SYM[(uint8_t)val]);
 }
