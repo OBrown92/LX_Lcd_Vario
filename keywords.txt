@@ -11,3 +11,5 @@ show	KEYWORD2
 show2	KEYWORD2
 addScr	KEYWORD2
 addSym	KEYWORD2
+addNumber	KEYWORD2
+upperNum	KEYWORD2
