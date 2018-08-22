@@ -8,14 +8,10 @@
 PCF8576::PCF8576()
 {
     Wire.begin();
-    //oldBuffer[0][0] = 0;
-    //oldBuffer[0][1] = 0;
-    //oldBuffer[0][2] = 0;
 }
 
-//Begin method
+//Begin method, not used so far
 void PCF8576::begin(){
-    Serial.println(SCR[0][0]);
 }
 
 void PCF8576::addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t blink, uint8_t bankSel){
@@ -30,7 +26,6 @@ void PCF8576::addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t b
 void PCF8576::init(){
     //init all added PCF's, don't know exactly if you have to init all
     for (uint8_t pcf = 0; pcf < PCFcount; pcf++){
-        Serial.println("init complete");
         Wire.beginTransmission(settings[pcf][0]);
         Wire.write(CONTINUE | settings[pcf][1]); //modeset
         Wire.write(CONTINUE | settings[pcf][3]); //blink
@@ -62,38 +57,32 @@ void PCF8576::fire(){
 	Wire.endTransmission();
 }
 
-void PCF8576::show2(){
-    //because clearing and setting new display data let the display
-    //flicker, this is a new try to solve this Problem by not clearing
-    //the display first
-
+void PCF8576::show(){
     //first set all data from the old buffer to zero
     for (uint8_t i = 0; i < oldBufferCount; i++){
         oldBuffer[i][2] = 0;
     }
     //compare if pointer already exist and set data from new buffer
     //if not add line to oldBuffer
-    bool found = false;
+    int counter = oldBufferCount;
     for (uint8_t i = 0; i < bufferCount; i++){
-        for (uint8_t j = 0; j < oldBufferCount; j++){
+        bool found = false;
+        for (uint8_t j = 0; j < counter; j++){
             if (buffer[i][1] == oldBuffer[j][1] && buffer[i][0] == oldBuffer[j][0]){
                 oldBuffer[j][2] = buffer[i][2];
                 found = true;
-                //break;
+                break;
             }
         }
         if(!found){
-            
-            oldBuffer[oldBufferCount][0] = buffer[i][0];
-            oldBuffer[oldBufferCount][1] = buffer[i][1];
-            oldBuffer[oldBufferCount][2] = buffer[i][2];
-            found = false;
-            oldBufferCount++;
+            Serial.println("not found");
+                oldBuffer[oldBufferCount][0] = buffer[i][0];
+                oldBuffer[oldBufferCount][1] = buffer[i][1];
+                oldBuffer[oldBufferCount][2] = buffer[i][2];
+                found = false;
+                oldBufferCount++;
         }
     }
-    Serial.println(oldBuffer[0][0]);
-    Serial.println(oldBuffer[0][1]);
-    Serial.println(oldBuffer[0][2]);
 
     //actually write the data
     for (uint8_t i = 0; i < oldBufferCount; i++){
@@ -115,7 +104,7 @@ void PCF8576::show2(){
     bufferCount = 0;
 }
 
-void PCF8576::show(){
+void PCF8576::showOLD(){
     //clear the display, let it flicker
     clear();
     //Write the data to the display
@@ -145,7 +134,8 @@ void PCF8576::addToBuffer(uint8_t *val){
             buffer[bufferCount][i] = val[i];
         }
         bufferCount++;
-    } 
+    }
+    
 }
 
 void PCF8576::addInd(float val){
@@ -165,4 +155,19 @@ void PCF8576::addScr(uint8_t val){
 
 void PCF8576::addSym(uint8_t val){
     addToBuffer((uint8_t *)SYM[(uint8_t)val]);
+}
+
+void PCF8576::addNumber(uint8_t pos, uint8_t val){
+    for (uint8_t i = 1; i <= NUM[val][0]; i++){
+        //Serial.println(CHR9[(uint8_t)NUM[val][i]][2]);
+        addToBuffer((uint8_t *)CHR1[(uint8_t)NUM[val][i]+((pos -1)*7)]);
+    }
+}
+
+void PCF8576::upperNum(int16_t val){
+    for (uint8_t i = 0; i < 2; i++){
+        //addToBuffer((uint8_t *)NUM1[(uint8_t)NUM11[i]]);
+        //addToBuffer((uint8_t *)SYM[(uint8_t)val]);
+    }
+    
 }
