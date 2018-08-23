@@ -37,6 +37,13 @@ You have to figure out the modeset of your display. The PCF can control displays
 ### Blink mode
 The blink mode can be set to 2 Hz, 1 Hz or 0,5 Hz and also to alternation blinking. For more details, see the datasheet. The LX Lcd Display don't blink. Someone wrote in a thread "never blink".
 ## Software
+### Basic usage
+Download the library and put it in the library folder. Include it in your sketch, create the object, thats it.
+```c
+#include <LX_Lcd_Varoio.h>
+LX_Lcd_Vario lx;
+```
+Take a look in the example Sketch.
 ### Library
 I first want to write a universal library for the PCF8576 but it turned out that the displays are very various designed. I will extract the main parts later and put them online.
 
@@ -60,19 +67,19 @@ void setup() {
 	pcf.addPCF(B111000, set_modeset, set_deviceselect_2, set_blink, set_bankselect);
 }
 ```
-#### void init()
+##### void init()
 The init function set up the PCF's and the library. It works with the LX Lcd Vario but have to improved for universal use (soon). Call this one after *addPCF()*
-#### void fire()
+##### void fire()
 This function lets every display segment light up.
-#### void clear()
+##### void clear()
 This function clears every segment.
-#### void addInd(val)
+##### void addInd(val)
 This function takes a value in the unit m/s (meter per second) and displays the corresponding vario indication element.
-#### void addScr(val)
+##### void addScr(val)
 This function displays the elements of the speed command ring (scr). For now it takes a value and displays the element like the one in the mapping of the display. I don't know yet for what I want to use this indicator.
-#### void addSym(val)
+##### void addSym(val)
 This function writes one of the 21 symbols to the buffer. For now it takes only a number but later on I want to pass a argument like *BAT* or something. You can look up the symbols in the *LCD_VARIO_mapping.h* file.
-#### void addNumber(pos, val)
+##### void addNumber(pos, val)
 This function writes a number to one of the 9 nummeric fields.
-#### void show()
+##### void show()
 This one is important. The function actually writes the buffer to the display. Only the *fire()* and *clear()* functions working without this one. After writing the buffer to the display the buffer is flushed. My first try (*showOLD()*) was to clear the display first and then write the data but the display starts to flicker. So this one compares the old buffer with the new one and only clear the unused data and write the new.
