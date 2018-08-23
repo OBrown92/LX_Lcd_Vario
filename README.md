@@ -46,7 +46,7 @@ The LCD_VARIO_mapping.h file took me much time to figure out. The mapping of eve
 #### Functions
 ##### void addPCF(pcfAddr, modeSet, devSel, blink, bankSel)
 This function is a remnant of the attempt to write a universal library for the PCF8576. For now its working only with the initialization of the two PCF's but maybe I hardcode the PCF's sometime to make this library more specific to the LX Lcd Vario Display. You can combine the settings with the predefined bits in LX_LcdVario.h
-```arduino
+```c
 #define PCFAddress B111000 //This defines the Slave Adress on the I2C Bus, its controlled via the SA0 Pin
 byte set_modeset = MODESET | MODE_NORMAL | DISPLAY_ENABLED | BIAS_HALF | DRIVE_4;
 byte set_blink = BLINK | BLINKING_ALTERNATION | BLINK_FREQUENCY_OFF;
