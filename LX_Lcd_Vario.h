@@ -67,9 +67,7 @@ class LX_Lcd_Vario
         void init();
         void clear();
         void fire();
-        void add();
         void addInd(float val);
-        void addToBuffer(uint8_t *val);
         void show();
         void showOLD();
         void addScr(uint8_t val);
@@ -84,7 +82,7 @@ class LX_Lcd_Vario
         uint8_t oldBuffer[19][3];
         uint8_t bufferCount = 0;
         uint8_t oldBufferCount = 0;
-
+        void addToBuffer(uint8_t *val);
 };
 
 #endif
