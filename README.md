@@ -85,9 +85,9 @@ This function writes a number to one of the 9 nummeric fields.
 This one is important. The function actually writes the buffer to the display. Only the *fire()* and *clear()* functions working without this one. After writing the buffer to the display the buffer is flushed. My first try (*showOLD()*) was to clear the display first and then write the data but the display starts to flicker. So this one compares the old buffer with the new one and only clear the unused data and write the new.
 ## ToDo
 - [x] Basic features
-- [] Optimize the number function
-- [] Code and speed optimization
-- [] get it work with our OV (RS232, Software, ...)
+- [ ] Optimize the number function
+- [ ] Code and speed optimization
+- [ ] get it work with our OV (RS232, Software, ...)
 
 And much more, if you want to contribute open a ticket, fork it or send me a pull request.
 Discussion in the [XCSoar Forum](https://forum.xcsoar.org/viewtopic.php?f=30&t=3335)
