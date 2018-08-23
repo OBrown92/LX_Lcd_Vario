@@ -1,5 +1,5 @@
 # LX Lcd Vario Library
-This is a arduino library to communicate with PCF8576 display controller in the LX Lcd Vario Display.
+This is a arduino library to communicate with PCF8576 display controller in the LX Lcd Vario Display. [Demo Video](https://youtu.be/GsjauvaOhFE)
 
 ## Story
 I fly in a gliding club in Nordhorn. Some time ago we installed an OpenVario in our DuoDiscus. However, there is no second display for the digital vario. Therefore the idea came up to address the old LX Vario with an Arduino to use it as a second display.
