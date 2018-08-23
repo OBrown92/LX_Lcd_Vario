@@ -41,3 +41,36 @@ The blink mode can be set to 2 Hz, 1 Hz or 0,5 Hz and also to alternation blinki
 I first want to write a universal library for the PCF8576 but it turned out that the displays are very various designed. I will extract the main parts later and put them online.
 
 The library is now optimized for the LX Lcd Display. It works with a **buffer** and a **show()** function. Every segment you want to show must be put in a buffer. Thats important because some segements share the same byte and have to combined via _bitwise or_ before write them to the display, otherwise you override the value old value.
+### Mapping
+The LCD_VARIO_mapping.h file took much time. The mapping of every segment 
+#### Functions
+##### void addPCF(pcfAddr, modeSet, devSel, blink, bankSel)
+This function is a remnant of the attempt to write a universal library for the PCF8576. For now its working only with the initialization of the two PCF's but maybe I hardcode the PCF's sometime to make this library more specific to the LX Lcd Vario Display. You can combine the settings with the predefined bits in LX_LcdVario.h
+```arduino
+#define PCFAddress B111000 //This defines the Slave Adress on the I2C Bus, its controlled via the SA0 Pin
+byte set_modeset = MODESET | MODE_NORMAL | DISPLAY_ENABLED | BIAS_HALF | DRIVE_4;
+byte set_blink = BLINK | BLINKING_ALTERNATION | BLINK_FREQUENCY_OFF;
+byte set_bankselect = BANKSELECT | BANKSELECT_O1_RAM0 | BANKSELECT_O2_RAM0; //doesn't really matter, because Drive mode is 4
+byte set_deviceselect_1 = DEVICE_SELECT; //A0, A1, A2 set to ground
+byte set_deviceselect_2 = DEVICE_SELECT | DEVICE_SELECT_A0; //A0 is high, the others low
+
+void setup() {
+	//add your controller to the Library.
+	pcf.addPCF(B111000, set_modeset, set_deviceselect_1, set_blink, set_bankselect);
+	pcf.addPCF(B111000, set_modeset, set_deviceselect_2, set_blink, set_bankselect);
+}
+```
+#### void init()
+The init function set up the PCF's and the library. It works with the LX Lcd Vario but have to improved for universal use (soon). Call this one after *addPCF()*
+#### void fire()
+This function lets every display segment light up.
+#### void clear()
+This function clears every segment.
+#### void addInd(val)
+This function takes a value in the unit m/s (meter per second) and displays the corresponding vario indication element.
+#### void addScr(val)
+This function displays the elements of the speed command ring (scr). For now it takes a value and displays the element like the one in the mapping of the display. I don't know yet for what I want to use this indicator.
+#### void addSym(val)
+This function writes one of the 21 symbols to the buffer. For now it takes only a number but later on I want to pass a argument like *BAT* or something. You can look up the symbols in the *LCD_VARIO_mapping.h* file.
+#### void addNumber(pos, val)
+This function writes a number to one of the 9 nummeric fields.
