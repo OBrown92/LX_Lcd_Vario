@@ -37,6 +37,10 @@ You have to figure out the modeset of your display. The PCF can control displays
 ### Blink mode
 The blink mode can be set to 2 Hz, 1 Hz or 0,5 Hz and also to alternation blinking. For more details, see the datasheet. The LX Lcd Display don't blink. Someone wrote in a thread "never blink".
 ## Software
+### Library
+I first want to write a universal library for the PCF8576 but it turned out that the displays are very various designed. I will extract the main parts later and put them online.
+
+The library is now optimized for the LX Lcd Display. It works with a **buffer** and a **show()** function. Every segment you want to show must be put in a buffer. Thats important because some segements share the same byte and have to combined via _bitwise or_ before write them to the display, otherwise you override the value old value.
 ### Basic usage
 Download the library and put it in the library folder. Include it in your sketch, create the object, thats it.
 ```c
@@ -44,10 +48,6 @@ Download the library and put it in the library folder. Include it in your sketch
 LX_Lcd_Vario lx;
 ```
 Take a look in the example Sketch.
-### Library
-I first want to write a universal library for the PCF8576 but it turned out that the displays are very various designed. I will extract the main parts later and put them online.
-
-The library is now optimized for the LX Lcd Display. It works with a **buffer** and a **show()** function. Every segment you want to show must be put in a buffer. Thats important because some segements share the same byte and have to combined via _bitwise or_ before write them to the display, otherwise you override the value old value.
 ### Mapping
 The LCD_VARIO_mapping.h file took me much time to figure out. The mapping of every segment is organized in a 2D Array and sorted in groups of elements. Every Segment consists of three fields. The *first* field describes which controller is responsible for the segment. The *second* field is the pointer and the *third* is the actually data.
 #### Functions
@@ -83,3 +83,11 @@ This function writes one of the 21 symbols to the buffer. For now it takes only 
 This function writes a number to one of the 9 nummeric fields.
 ##### void show()
 This one is important. The function actually writes the buffer to the display. Only the *fire()* and *clear()* functions working without this one. After writing the buffer to the display the buffer is flushed. My first try (*showOLD()*) was to clear the display first and then write the data but the display starts to flicker. So this one compares the old buffer with the new one and only clear the unused data and write the new.
+## ToDo
+- [x] Basic features
+- [] Optimize the number function
+- [] Code and speed optimization
+- [] get it work with our OV (RS232, Software, ...)
+
+And much more, if you want to contribute open a ticket, fork it or send me a pull request.
+Discussion in the [XCSoar Forum](https://forum.xcsoar.org/viewtopic.php?f=30&t=3335)
