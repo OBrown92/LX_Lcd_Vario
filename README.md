@@ -8,19 +8,21 @@ First trys to analyze the RS485 Bus failed. Then I think of solder only the disp
 ## Hardware
 ### Display
 The display is a segment lcd display. It has **154** segemnts. And every segement can be controlled individually.
-IMAGES
+![](.img/LX_Vario.jpg)
 ### Circuit Board
 There are __two__ circuit boards in the housing of the device.
 The **top** one is mainly for the power distribution.
-IMAGES
+![Top Front amd Back](.img/first_front_back.jpg)
 The **bottom** one is soldered directly to the display and has a few more chips:
 * Two PCF8576T display driver
 * Temic s-80C32-16 (I think its the microcontroller)
 * AM27C010-90JC (EPROM)
 * HC573A (Shift Register, don't know exactly for what)
-IMAGES
+
+![](.img/I2C_Power.jpg)
 The interesting board is the bottom one with the PCF8576T controller. The datasheet is available and shows that these chips can adressed via the I2C Protocol. To control the PCF's i soldered two wires on the circuit board and removed two pins from the Temic microcontroller. Luckily there are two solder points for the SCL and SDA so it's very easy. It's also very easy to power the Display, just put 5V (for better contrast only 4V) on the Pins in the picture.
-IMAGE
+
+![Second Fron and Back](.img/second_front_back.jpg)
 ### PCF8576T
 The PCF8576T are display controller for various lcd displays. They are used in many displays. The datasheet is very datailed. The most important things and settings you have to figure out are:
 * The slave address of the PCF's
