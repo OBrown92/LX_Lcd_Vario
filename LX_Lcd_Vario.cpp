@@ -1,20 +1,20 @@
 #include "Arduino.h"
-#include "PCF8576.h"
+#include "LX_Lcd_Vario.h"
 #include <Wire.h>
 #include "LCD_VARIO_mapping.h"
 
 
 //Constructor, initialize Wire lib
-PCF8576::PCF8576()
+LX_Lcd_Vario::LX_Lcd_Vario()
 {
     Wire.begin();
 }
 
 //Begin method, not used so far
-void PCF8576::begin(){
+void LX_Lcd_Vario::begin(){
 }
 
-void PCF8576::addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t blink, uint8_t bankSel){
+void LX_Lcd_Vario::addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t blink, uint8_t bankSel){
     settings[PCFcount][0] = pcfAddr;
     settings[PCFcount][1] = modeSet;
     settings[PCFcount][2] = devSel;
@@ -23,7 +23,7 @@ void PCF8576::addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t b
     PCFcount++;
 }
 
-void PCF8576::init(){
+void LX_Lcd_Vario::init(){
     //init all added PCF's, don't know exactly if you have to init all
     for (uint8_t pcf = 0; pcf < PCFcount; pcf++){
         Wire.beginTransmission(settings[pcf][0]);
@@ -35,7 +35,7 @@ void PCF8576::init(){
     }
 }
 
-void PCF8576::clear(){
+void LX_Lcd_Vario::clear(){
     //works only for one Hardware Adress for now, have to implement the logic for two
     Wire.beginTransmission(settings[0][0]);
 	Wire.write(CONTINUE | DEVICE_SELECT); //select the first PCF, assume that the first is the device with 000, maybe implement another logic
@@ -46,7 +46,7 @@ void PCF8576::clear(){
 	Wire.endTransmission();
 }
 
-void PCF8576::fire(){
+void LX_Lcd_Vario::fire(){
     //same as in lcd_clear()
     Wire.beginTransmission(settings[0][0]);
 	Wire.write(CONTINUE | DEVICE_SELECT); //select the first PCF, assume that the first is the device with 000, maybe implement another logic
@@ -57,7 +57,7 @@ void PCF8576::fire(){
 	Wire.endTransmission();
 }
 
-void PCF8576::show(){
+void LX_Lcd_Vario::show(){
     //first set all data from the old buffer to zero
     for (uint8_t i = 0; i < oldBufferCount; i++){
         oldBuffer[i][2] = 0;
@@ -104,7 +104,7 @@ void PCF8576::show(){
     bufferCount = 0;
 }
 
-void PCF8576::showOLD(){
+void LX_Lcd_Vario::showOLD(){
     //clear the display, let it flicker
     clear();
     //Write the data to the display
@@ -119,7 +119,7 @@ void PCF8576::showOLD(){
     bufferCount = 0;
 }
 
-void PCF8576::addToBuffer(uint8_t *val){
+void LX_Lcd_Vario::addToBuffer(uint8_t *val){
     //check if section already set and do bitwise or
     bool found = false;
     for (uint8_t i = 0; i < bufferCount; i++){
@@ -138,7 +138,7 @@ void PCF8576::addToBuffer(uint8_t *val){
     
 }
 
-void PCF8576::addInd(float val){
+void LX_Lcd_Vario::addInd(float val){
     if (val >= 5){
         addToBuffer((uint8_t *)IND[0]);
     }else if (val <= -5){
@@ -149,22 +149,22 @@ void PCF8576::addInd(float val){
     }
 }
 
-void PCF8576::addScr(uint8_t val){
+void LX_Lcd_Vario::addScr(uint8_t val){
     addToBuffer((uint8_t *)SCR[(uint8_t)val]);
 }
 
-void PCF8576::addSym(uint8_t val){
+void LX_Lcd_Vario::addSym(uint8_t val){
     addToBuffer((uint8_t *)SYM[(uint8_t)val]);
 }
 
-void PCF8576::addNumber(uint8_t pos, uint8_t val){
+void LX_Lcd_Vario::addNumber(uint8_t pos, uint8_t val){
     for (uint8_t i = 1; i <= NUM[val][0]; i++){
         //Serial.println(CHR9[(uint8_t)NUM[val][i]][2]);
         addToBuffer((uint8_t *)CHR1[(uint8_t)NUM[val][i]+((pos -1)*7)]);
     }
 }
 
-void PCF8576::upperNum(int16_t val){
+void LX_Lcd_Vario::upperNum(int16_t val){
     for (uint8_t i = 0; i < 2; i++){
         //addToBuffer((uint8_t *)NUM1[(uint8_t)NUM11[i]]);
         //addToBuffer((uint8_t *)SYM[(uint8_t)val]);

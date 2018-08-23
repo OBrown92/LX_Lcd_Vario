@@ -1,5 +1,5 @@
-#ifndef PCF8576_h
-#define PCF8576_h
+#ifndef LX_Lcd_Vario_h
+#define LX_Lcd_Vario_h
 
 #include "Arduino.h"
 
@@ -58,10 +58,10 @@
 #define DEVICE_SELECT_A1 2
 #define DEVICE_SELECT_A0 1		// A2,A1,A0 = B111
 
-class PCF8576
+class LX_Lcd_Vario
 {
     public:
-        PCF8576();
+        LX_Lcd_Vario();
         void begin();
         void addPCF(uint8_t pcfAddr, uint8_t modeSet, uint8_t devSel, uint8_t blink, uint8_t bankSel);
         void init();
