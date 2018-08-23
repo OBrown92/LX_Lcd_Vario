@@ -19,7 +19,8 @@ The **bottom** one is soldered directly to the display and has a few more chips:
 * AM27C010-90JC (EPROM)
 * HC573A (Shift Register, don't know exactly for what)
 IMAGES
-The interesting board is the bottom one with the PCF8576T controller. The datasheet is available and shows that these chips can adressed via the I2C Protocol.
+The interesting board is the bottom one with the PCF8576T controller. The datasheet is available and shows that these chips can adressed via the I2C Protocol. To control the PCF's i soldered two wires on the circuit board and removed two pins from the Temic microcontroller. Luckily there are two solder points for the SCL and SDA so it's very easy. It's also very easy to power the Display, just put 5V (for better contrast only 4V) on the Pins in the picture.
+IMAGE
 ### PCF8576T
 The PCF8576T are display controller for various lcd displays. They are used in many displays. The datasheet is very datailed. The most important things and settings you have to figure out are:
 * The slave address of the PCF's
@@ -36,3 +37,7 @@ You have to figure out the modeset of your display. The PCF can control displays
 ### Blink mode
 The blink mode can be set to 2 Hz, 1 Hz or 0,5 Hz and also to alternation blinking. For more details, see the datasheet. The LX Lcd Display don't blink. Someone wrote in a thread "never blink".
 ## Software
+### Library
+I first want to write a universal library for the PCF8576 but it turned out that the displays are very various designed. I will extract the main parts later and put them online.
+
+The library is now optimized for the LX Lcd Display. It works with a **buffer** and a **show()** function. Every segment you want to show must be put in a buffer. Thats important because some segements share the same byte and have to combined via _bitwise or_ before write them to the display, otherwise you override the value old value.
