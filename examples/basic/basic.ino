@@ -1,7 +1,7 @@
-#include <PCF8576.h>
+#include <LX_Lcd_Vario.h>
 
 //create the object
-PCF8576 pcf;
+LX_Lcd_Vario pcf;
 
 //Setup the Variables that you have to pass to the library, this works for the LX Vario
 #define PCFAddress B111000 //This defines the Slave Adress on the I2C Bus, its controlled via the SA0 Pin
@@ -17,7 +17,7 @@ void setup() {
   //It works better with 4V therefore I use it on one of the Arduino Pins
   pinMode(7, OUTPUT);
   digitalWrite(7, HIGH);
-  delay(100) //time to wake up
+  delay(100); //time to wake up
 	//add your controller to the Library.
 	pcf.addPCF(B111000, set_modeset, set_deviceselect_1, set_blink, set_bankselect);
 	pcf.addPCF(B111000, set_modeset, set_deviceselect_2, set_blink, set_bankselect);
