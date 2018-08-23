@@ -35,7 +35,7 @@ Two slave addresses are reserved for the PCF8576 controller. **B111000** and **B
 #### Device select
 You can address up to 8 devices with one slave address. That means you can combine 16 PCF's on one I2C Bus. The device select is set via the **A0**, **A1** and **A2** pins. In the case of the LX Lcd Vario, the first chip has all pins connected to ground and the second one has **A0** connected to VDD.
 ### Modeset
-You have to figure out the modeset of your display. The PCF can control displays with backplane drive configuration of static or 2/3/4 backplane multiplexing. You have to set the display bias configuration to static, 1/2 or 1/3. Also you can enable or disable the display or put it in a power saving mode. The LX Lcd Vario display has 4 Backplanes, a bias of 1/2 and no power saving.
+You have to figure out the modeset of your display. The PCF can control displays with backplane drive configuration of static or 2/3/4 backplane multiplexing. You have to set the display bias configuration to static, 1/2 or 1/3. Also you can enable or disable the display or put it in a power saving mode. The LX Lcd Vario display has 4 Backplanes, a bias of 1/3 and no power saving.
 ### Blink mode
 The blink mode can be set to 2 Hz, 1 Hz or 0,5 Hz and also to alternation blinking. For more details, see the datasheet. The LX Lcd Display don't blink. Someone wrote in a thread "never blink".
 ## Software
