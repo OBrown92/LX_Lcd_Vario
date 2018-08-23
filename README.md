@@ -42,7 +42,7 @@ I first want to write a universal library for the PCF8576 but it turned out that
 
 The library is now optimized for the LX Lcd Display. It works with a **buffer** and a **show()** function. Every segment you want to show must be put in a buffer. Thats important because some segements share the same byte and have to combined via _bitwise or_ before write them to the display, otherwise you override the value old value.
 ### Mapping
-The LCD_VARIO_mapping.h file took much time. The mapping of every segment 
+The LCD_VARIO_mapping.h file took me much time to figure out. The mapping of every segment is organized in a 2D Array and sorted in groups of elements. Every Segment consists of three fields. The *first* field describes which controller is responsible for the segment. The *second* field is the pointer and the *third* is the actually data.
 #### Functions
 ##### void addPCF(pcfAddr, modeSet, devSel, blink, bankSel)
 This function is a remnant of the attempt to write a universal library for the PCF8576. For now its working only with the initialization of the two PCF's but maybe I hardcode the PCF's sometime to make this library more specific to the LX Lcd Vario Display. You can combine the settings with the predefined bits in LX_LcdVario.h
@@ -74,3 +74,5 @@ This function displays the elements of the speed command ring (scr). For now it 
 This function writes one of the 21 symbols to the buffer. For now it takes only a number but later on I want to pass a argument like *BAT* or something. You can look up the symbols in the *LCD_VARIO_mapping.h* file.
 #### void addNumber(pos, val)
 This function writes a number to one of the 9 nummeric fields.
+#### void show()
+This one is important. The function actually writes the buffer to the display. Only the *fire()* and *clear()* functions working without this one. After writing the buffer to the display the buffer is flushed. My first try (*showOLD()*) was to clear the display first and then write the data but the display starts to flicker. So this one compares the old buffer with the new one and only clear the unused data and write the new.
