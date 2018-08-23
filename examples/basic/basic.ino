@@ -40,7 +40,7 @@ void loop(){
 		lx.addInd(i);
 		//Every function, except clear() and fire(), add their display data to a buffer. You have to call show() to bring it to the display
 		lx.show();
-		delay(100);
+		delay(50);
 	}
 
 	//Let the Speed Command Ring go up
@@ -48,7 +48,7 @@ void loop(){
 		//this function takes only numbers of the indicators, for now
 		lx.addScr(i);
 		lx.show();
-		delay(100);
+		delay(200);
 	}
 
 	//Write numbers
@@ -56,7 +56,7 @@ void loop(){
 		//this function writes a number to the selected position, see more in readme
 		lx.addNumber(i, i);
 		lx.show();
-		delay(100);
+		delay(200);
 	}
 
 	//Show symbols
@@ -64,6 +64,6 @@ void loop(){
 		//this function shows the symbols, for now you have to look them up in the mapping.
 		lx.addSym(i);
 		lx.show();
-		delay(100);
+		delay(200);
 	}
 }
