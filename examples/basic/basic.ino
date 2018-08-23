@@ -1,3 +1,13 @@
+/*
+This sketch demonstrate the basic usage of the library.
+You have to connect the display to ground and 5V as discribed on GitHub.
+Also you have to solder a wire to the holes on the LX Lcd Vario as discribed on GitHub.
+The Pins for SDA and SCL are different between some Arduinos, so google it. For my Arduino
+Uno it is:
+Pin A4 -> SDA
+Pin A5 -> SCL 
+*/
+
 #include <LX_Lcd_Vario.h>
 
 //create the object
@@ -14,10 +24,7 @@ byte set_deviceselect_2 = DEVICE_SELECT | DEVICE_SELECT_A0; //A0 is high
 
 
 void setup() {
-  //It works better with 4V therefore I use it on one of the Arduino Pins
-  pinMode(7, OUTPUT);
-  digitalWrite(7, HIGH);
-  delay(100); //time to wake up
+	delay(100); //time to wake up
 	//add your controller to the Library.
 	lx.addPCF(B111000, set_modeset, set_deviceselect_1, set_blink, set_bankselect);
 	lx.addPCF(B111000, set_modeset, set_deviceselect_2, set_blink, set_bankselect);

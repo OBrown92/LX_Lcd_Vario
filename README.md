@@ -20,7 +20,7 @@ The **bottom** one is soldered directly to the display and has a few more chips:
 * HC573A (Shift Register, don't know exactly for what)
 
 ![](.img/I2C_Power.jpg)
-The interesting board is the bottom one with the PCF8576T controller. The datasheet is available and shows that these chips can adressed via the I2C Protocol. To control the PCF's i soldered two wires on the circuit board and removed two pins from the Temic microcontroller. Luckily there are two solder points for the SCL and SDA so it's very easy. It's also very easy to power the Display, just put 5V (for better contrast only 4V) on the Pins in the picture.
+The interesting board is the bottom one with the PCF8576T controller. The datasheet is available and shows that these chips can adressed via the I2C Protocol. To control the PCF's i soldered two wires on the circuit board and removed two pins from the Temic microcontroller. Luckily there are two solder points for the SCL and SDA so it's very easy. It's also very easy to power the Display, just put 5V on the Pins in the picture.
 
 ![Second Fron and Back](.img/second_front_back.jpg)
 ### PCF8576T
